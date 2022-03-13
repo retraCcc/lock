@@ -18,7 +18,7 @@ local partz = "UpperTorso"
     Tracer.Name = "paigeisbest"	
     Tracer.Anchored = true		
     Tracer.CanCollide = false
-    Tracer.Transparency = 1
+    Tracer.Transparency = 0.65
     Tracer.Parent = game.Workspace
     Tracer.Shape = types.Block
     Tracer.Size = Vector3.new(8,8,8)
@@ -79,7 +79,7 @@ end)
         	end	
                if notifications then
     			game.StarterGui:SetCore("SendNotification", {
-        Title = "";
+        Title = "Itchy-ware";
         Text = "Target: "..tostring(Plr.Character.Humanoid.DisplayName);
     
     })
@@ -90,13 +90,13 @@ end)
         	end	
         if notifications then
                         game.StarterGui:SetCore("SendNotification", {
-                   Title = "",
+                   Title = "Itchy-ware",
                    Text = "Unlocked",
                    Duration = 5
                })
            elseif target == false then
                         game.StarterGui:SetCore("SendNotification", {
-                   Title = "",
+                   Title = "Itchy-ware",
                    Text = "Target isn't enabled",
                    Duration = 5
      
