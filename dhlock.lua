@@ -4,18 +4,9 @@ local pred = 0.131
 local chat = false
 local notifications = true
 local partmode = true
-local airfunc = true
+local airfunc = false
 local partz = "UpperTorso"
 
-------------------------
-
-------------------------
-
-------------------------
-
-------------------------
-
-------------------------
 
     local types = {
         Ball = Enum.PartType.Ball,
@@ -27,8 +18,8 @@ local partz = "UpperTorso"
     Tracer.Name = "paigeisbest"	
     Tracer.Anchored = true		
     Tracer.CanCollide = false
-    Tracer.Transparency = 0.65
-    Tracer.Parent = game.Workspace	
+    Tracer.Transparency = 1
+    Tracer.Parent = game.Workspace
     Tracer.Shape = types.Block
     Tracer.Size = Vector3.new(8,8,8)
     Tracer.Color = Color3.fromRGB(222, 222, 222)
@@ -84,18 +75,40 @@ end)
                if Locking then
         Plr = getClosestPlayerToCursor()
                 if chat then
-        local A_1 = "local a2"..tostring(Plr.Character.Humanoid.DisplayName) local A_2 = "All" local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest Event:FireServer(A_1, A_2) 
+        local A_1 = "Target: "..tostring(Plr.Character.Humanoid.DisplayName) local A_2 = "All" local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest Event:FireServer(A_1, A_2) 
         	end	
                if notifications then
+    			game.StarterGui:SetCore("SendNotification", {
+        Title = "";
+        Text = "Target: "..tostring(Plr.Character.Humanoid.DisplayName);
+    
+    })
     end
     elseif not Locking then
          if chat then
-        local A_1 = "local a1" local A_2 = "All" local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest Event:FireServer(A_1, A_2) 
+        local A_1 = "Unlocked!" local A_2 = "All" local Event = game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest Event:FireServer(A_1, A_2) 
         	end	
+        if notifications then
+                        game.StarterGui:SetCore("SendNotification", {
+                   Title = "",
+                   Text = "Unlocked",
+                   Duration = 5
+               })
            elseif target == false then
+                        game.StarterGui:SetCore("SendNotification", {
+                   Title = "",
+                   Text = "Target isn't enabled",
+                   Duration = 5
+     
+                   })
                
-               end          
-    end
+               end
+                  
+ 
+ end     end   
+end
+end
+end)
      
 	
 --
@@ -131,6 +144,3 @@ end
         partz = "LowerTorso"
 	end
 	end
-end
-end
-end)
