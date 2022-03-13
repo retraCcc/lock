@@ -4,7 +4,7 @@ local pred = 0.131
 local chat = false
 local notifications = true
 local partmode = true
-local airfunc = false
+local airfunc = true
 local partz = "UpperTorso"
 
 
