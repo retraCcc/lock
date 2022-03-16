@@ -5,7 +5,7 @@ local chat = false
 local notifications = true
 local partmode = true
 local partz = "HumanoidRootPart"
-local Plr
+local Plr;
 
 local pred = true
 local predvalue = 0.11
@@ -24,7 +24,7 @@ local sets = {
     itchysets = {
         Enabled = true,
         AIRSHOT = true,
-        AUTOPRED = false,
+        AUTOPRED = true,
         RESOVLER = false
     }
 }
@@ -161,16 +161,12 @@ if partmode then
         end
     )
 end
-
-local pingvalue = nil;
-local split = nil;
-local ping = nil;
-
 --
+        while wait() do
         if sets.itchysets.AUTOPRED == true then
-             pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-             split = string.split(pingvalue,'(')
-             ping = tonumber(split[1])
+            local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+            local split = string.split(pingvalue,'(')
+            local ping = tonumber(split[1])
             if ping < 130 then
                 predvalue = 0.151
             elseif ping < 125 then
@@ -281,3 +277,4 @@ local ping = nil;
                 partz = "HumanoidRootPart"
         end
     end)
+    end
