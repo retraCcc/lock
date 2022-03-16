@@ -24,8 +24,8 @@ local sets = {
     itchysets = {
         Enabled = true,
         AIRSHOT = true,
-        AUTOPRED = true,
-        RESOVLER = true
+        AUTOPRED = false,
+        RESOVLER = false
     }
 }
 
@@ -43,21 +43,15 @@ local lp = game.Players.LocalPlayer
 local mouse = lp:GetMouse()
 local Runserv = game:GetService("RunService")
 
-circle = Drawing.new("Circle")
+local circle = Drawing.new("Circle")
 circle.Color = Color3.fromRGB(255, 255, 255)
-circle.Thickness = 0
+circle.Thickness = 1
 circle.NumSides = 732
 circle.Radius = 120
-circle.Thickness = 0
 circle.Transparency = 0
 circle.Visible = true
 circle.Filled = false
-
-Runserv.RenderStepped:Connect(
-    function()
-        circle.Position = Vector2.new(mouse.X, mouse.Y + 35)
-    end
-)
+circle.Position = Vector2.new(mouse.X, mouse.Y + 35)
 
 local guimain = Instance.new("Folder", game.CoreGui)
 local CC = game:GetService "Workspace".CurrentCamera
@@ -108,7 +102,8 @@ UserInputService.InputBegan:Connect(
                                 "SendNotification",
                                 {
                                     Title = "Itchy-ware",
-                                    Text = "Target: " .. tostring(Plr.Character.Humanoid.DisplayName)
+                                    Text = "Target: " .. tostring(Plr.Character.Humanoid.DisplayName),
+                                    Icon = "http://www.roblox.com/asset/?id=9111814881"
                                 }
                             )
                         end
@@ -126,6 +121,7 @@ UserInputService.InputBegan:Connect(
                                 {
                                     Title = "Itchy-ware",
                                     Text = "Unlocked",
+                                    Icon = "http://www.roblox.com/asset/?id=9111814881",
                                     Duration = 5
                                 }
                             )
@@ -135,6 +131,7 @@ UserInputService.InputBegan:Connect(
                                 {
                                     Title = "Itchy-ware",
                                     Text = "Target isn't enabled",
+                                    Icon = "http://www.roblox.com/asset/?id=9111814881",
                                     Duration = 5
                                 }
                             )
