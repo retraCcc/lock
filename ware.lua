@@ -1,6 +1,6 @@
 local target = true
 local key = Enum.KeyCode.Q
-local normpred = 0.131
+local normpred = 0.135
 local chat = false
 local notifications = true
 local partmode = true
@@ -8,7 +8,6 @@ local partz = "HumanoidRootPart"
 local Plr;
 
 local pred = true
-local predvalue = 0.11
 
 local anchor = 0
 local anchormax = 50
@@ -24,7 +23,7 @@ local sets = {
     itchysets = {
         Enabled = true,
         AIRSHOT = true,
-        AUTOPRED = true,
+        AUTOPRED = false,
         RESOVLER = false
     }
 }
@@ -36,7 +35,7 @@ Tracer.CanCollide = false
 Tracer.Transparency = 0.65
 Tracer.Parent = game.Workspace
 Tracer.Shape = types.Block
-Tracer.Size = Vector3.new(8, 8, 8)
+Tracer.Size = Vector3.new(14, 14, 14)
 Tracer.Color = Color3.fromRGB(222, 222, 222)
 
 local lp = game.Players.LocalPlayer
@@ -143,6 +142,33 @@ UserInputService.InputBegan:Connect(
     end
 )
 --
+game.Players.LocalPlayer.Chatted:Connect(
+    function(Chat)
+        if Chat == "/e +" then
+
+            normpred = normpred+0.001
+            
+            wait(0.5)
+
+            print("upped prediction to", normpred)
+
+        end
+    end
+)
+game.Players.LocalPlayer.Chatted:Connect(
+    function(Chat)
+        if Chat == "/e -" then
+
+            normpred = normpred-0.001
+            
+            wait(0.5)
+            
+            print("upped prediction to", normpred)
+
+        end
+    end
+)
+--
 local function rainbowa()
     local Brick = workspace.paigeisbest
             Brick.Color = Color3.fromHSV(tick()%5/5,0.5,1)
@@ -161,34 +187,6 @@ if partmode then
         end
     )
 end
---
-        while wait() do
-        if sets.itchysets.AUTOPRED == true then
-            local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
-            local split = string.split(pingvalue,'(')
-            local ping = tonumber(split[1])
-            if ping < 130 then
-                predvalue = 0.151
-            elseif ping < 125 then
-                predvalue = 0.149
-            elseif ping < 110 then
-                predvalue = 0.146
-            elseif ping < 105 then
-                predvalue = 0.138
-            elseif ping < 90 then
-                predvalue = 0.136
-            elseif ping < 80 then
-                predvalue = 0.134
-            elseif ping < 70 then
-                predvalue = 0.131
-            elseif ping < 60 then
-                predvalue = 0.1229
-            elseif ping < 50 then
-                predvalue = 0.1225
-            elseif ping < 40 then
-                predvalue = 0.1256
-            end
-        end
 
     local mt = getrawmetatable(game)
     local old = mt.__namecall
@@ -199,7 +197,7 @@ end
 
             if pred == true then
                 
-            args[3] = Plr.Character[partz].Position+(Plr.Character[partz].Velocity*predvalue)
+            args[3] = Plr.Character[partz].Position+(Plr.Character[partz].Velocity*normpred)
 
             else
 
@@ -277,4 +275,30 @@ end
                 partz = "HumanoidRootPart"
         end
     end)
-    end
+    
+        if sets.itchysets.AUTOPRED == true then
+        local pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+        local split = string.split(pingvalue,'(')
+        local ping = tonumber(split[1])
+        if ping < 130 then
+            getgenv().Prediction = 0.151
+        elseif ping < 125 then
+            getgenv().Prediction = 0.149
+        elseif ping < 110 then
+            getgenv().Prediction = 0.146
+        elseif ping < 105 then
+            getgenv().Prediction = 0.138
+        elseif ping < 90 then
+            getgenv().Prediction = 0.136
+        elseif ping < 80 then
+            getgenv().Prediction = 0.134
+        elseif ping < 70 then
+            getgenv().Prediction = 0.131
+        elseif ping < 60 then
+            getgenv().Prediction = 0.1229
+        elseif ping < 50 then
+            getgenv().Prediction = 0.1225
+        elseif ping < 40 then
+            getgenv().Prediction = 0.1256
+        end
+end
