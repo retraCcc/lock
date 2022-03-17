@@ -1,6 +1,6 @@
 local target = true
 local key = Enum.KeyCode.Q
-local normpred = 0.135
+local normpred = 0.125
 local chat = false
 local notifications = true
 local partmode = true
