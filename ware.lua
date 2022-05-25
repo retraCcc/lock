@@ -1,11 +1,46 @@
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Blissful4992/Kinetic/main/src.lua"))()
+
+local Overrides = {
+    Background = Color3.fromRGB(30, 30, 30),
+    Section_Background = Color3.fromRGB(25, 25, 25),
+
+    Dark_Borders = Color3.fromRGB(25, 25, 25),
+    Light_Borders = Color3.fromRGB(255, 255, 255),
+
+    Text_Color = Color3.fromRGB(255, 255, 255),
+
+    Accent = Color3.fromRGB(0, 255, 0),
+    Dark_Accent = Color3.fromRGB(0, 100, 0),
+}
+
+local Window = Library.NewWindow({
+    Text = "Fairy-Ware",
+
+    WindowSize = Vector2.new(550, 450),     -- Initial Size of the Window
+    WindowPosition = Vector2.new(400, 200), -- Initial Position of the Window
+
+    ThemeOverrides = Overrides,
+    Scalable = true, -- Default : True
+    
+    CloseCallback = function()
+        print("You closed the script !")
+    end
+})
+
+
+local Page = Window.NewPage({Text = "Rage"})
+
+local Section = Page.NewSection({Text = "Rage"})
+
 local target = true
 local key = Enum.KeyCode.Q
-local normpred = 0.1113129
 local chat = false
 local notifications = true
 local partmode = true
 local partz = "HumanoidRootPart"
 local Plr;
+
+getgenv().normpred = 0
 
 getgenv().filltrans = 0 --Change fill transparency
 getgenv().outlinetrans = 0 --Change outine transparency
@@ -28,7 +63,7 @@ local types = {
 local sets = {
     itchysets = {
         Enabled = true,
-        AIRSHOT = true,
+        AIRSHOT = false,
         AUTOPRED = false,
         RESOVLER = false
     }
@@ -95,82 +130,26 @@ UserInputService.InputBegan:Connect(
 
                     if locked then
                         Plr = getClosestPlayerToCursor()
-                        if chat then
-                            local A_1 = "Target: " .. tostring(Plr.Humanoid.DisplayName)
-                            local A_2 = "All"
-                            local Event =
-                                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
-                            Event:FireServer(A_1, A_2)
-                        end
-                        if notifications then
-                            game.StarterGui:SetCore(
-                                "SendNotification",
-                                {
-                                    Title = "Itchy-ware",
-                                    Text = "Target: " .. tostring(Plr.Humanoid.Parent),
-                                    Icon = "http://www.roblox.com/asset/?id=9111814881"
-                                }
-                            )
+                        for i = 1, 1 do
+                        Window.NewNotification({
+                        Title = "Locked",
+                        Body = "Locked",
+                        Time = math.random(1, 3)
+                        })
+                        task.wait(0.2)
                         end
                     elseif not locked then
-                        if chat then
-                            local A_1 = "Unlocked!"
-                            local A_2 = "All"
-                            local Event =
-                                game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
-                            Event:FireServer(A_1, A_2)
-                        end
-                        if notifications then
-                            game.StarterGui:SetCore(
-                                "SendNotification",
-                                {
-                                    Title = "Itchy-ware",
-                                    Text = "Unlocked",
-                                    Icon = "http://www.roblox.com/asset/?id=9111814881",
-                                    Duration = 5
-                                }
-                            )
-                        elseif target == false then
-                            game.StarterGui:SetCore(
-                                "SendNotification",
-                                {
-                                    Title = "Itchy-ware",
-                                    Text = "Target isn't enabled",
-                                    Icon = "http://www.roblox.com/asset/?id=9111814881",
-                                    Duration = 5
-                                }
-                            )
+                    for i = 1, 1 do
+                    Window.NewNotification({
+                    Title = "Unlocked",
+                    Body = "Unlocked",
+                    Time = math.random(1, 3)
+                    })
+                    task.wait(0.2)
                         end
                     end
                 end
             end
-        end
-    end
-)
---
-game.Players.LocalPlayer.Chatted:Connect(
-    function(Chat)
-        if Chat == "/e +" then
-
-            normpred = normpred+0.001
-            
-            wait(0.5)
-
-            print("upped prediction to", normpred)
-
-        end
-    end
-)
-game.Players.LocalPlayer.Chatted:Connect(
-    function(Chat)
-        if Chat == "/e -" then
-
-            normpred = normpred-0.001
-            
-            wait(0.5)
-            
-            print("upped prediction to", normpred)
-
         end
     end
 )
@@ -307,3 +286,107 @@ end
             getgenv().Prediction = 0.1256
         end
 end
+
+
+local Slider = Section.NewSlider({
+    Text = "Prediction - Slider",
+    Callback = function(value)
+    normpred = value
+    end,
+    Default = 0,
+    Min = 0, Max = 1,
+    Decimals = 2, -- Number of decimal numbers to show after the period/comma
+    Description = "You can slide me with your mouse to change the value !"
+})
+
+local Keybind = Section.NewKeybind({
+    Text = "Press Me", 
+    Callback = function()
+        print("You pressed the right key !")
+    end, 
+    KeyCallback = function(new)
+        print("You changed the key to: " .. string.sub(tostring(new), 14, #tostring(new)))
+    end, 
+    Default = Enum.KeyCode.X,
+    Description = "Press the key to activate this !",
+})
+
+for i = 1, 1 do
+Window.NewNotification({
+Title = "! Welcome !",
+Body = "Welcome to Fairy-Ware",
+Time = math.random(2, 10)
+   
+})
+task.wait(0.2)
+end
+
+local Page2 = Window.NewPage({Text = "Settings"})
+
+local Section2 = Page2.NewSection({Text = "Settings"})
+
+local Overrides = {}
+
+Section2.NewColorPicker({
+    Text = "Background", 
+    Callback = function(color)
+        Overrides.Background = color
+    end, 
+    Default = Window.WinTheme.Background
+})
+
+Section2.NewColorPicker({
+    Text = "Section Background", 
+    Callback = function(color)
+        Overrides.Section_Background = color
+    end, 
+    Default = Window.WinTheme.Section_Background
+})
+
+Section2.NewColorPicker({
+    Text = "Accent", 
+    Callback = function(color)
+        Overrides.Accent = color
+    end, 
+    Default = Window.WinTheme.Accent
+})
+
+Section2.NewColorPicker({
+    Text = "Dark Accent", 
+    Callback = function(color)
+        Overrides.Dark_Accent = color
+    end, 
+    Default = Window.WinTheme.Dark_Accent
+})
+
+Section2.NewColorPicker({
+    Text = "Light Borders", 
+    Callback = function(color)
+        Overrides.Light_Borders = color
+    end, 
+    Default = Window.WinTheme.Light_Borders
+})
+
+Section2.NewColorPicker({
+    Text = "Dark Borders", 
+    Callback = function(color)
+        Overrides.Dark_Borders = color
+    end, 
+    Default = Window.WinTheme.Dark_Borders
+})
+
+Section2.NewButton({
+    Text = "Update Theme", 
+    Callback = function()
+        Window.OverrideTheme(Overrides)
+    end
+})
+
+local ResetThemeButton = Window.NewUniversalButton({
+    Text = "Reset Theme", 
+    Callback = function()
+        print("Resetted !")
+        Window.ResetTheme()
+    end, 
+    Description = "This can be clicked multiple times !"
+})
