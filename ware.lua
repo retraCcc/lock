@@ -236,7 +236,7 @@ end
                     anchor = 0;
                 end
 
-                partz = "LeftLowerLeg"
+                partz = "LeftFoot"
 
             else
                 --// Anchor Check
