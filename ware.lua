@@ -236,7 +236,7 @@ end
                     anchor = 0;
                 end
 
-                partz = "LeftFoot"
+                partz = "LeftLowerLeg"
 
             else
                 --// Anchor Check
@@ -316,7 +316,7 @@ local Slider = Section.NewSlider({
     Default = 0,
     Min = 0, Max = 1,
     Decimals = 2, -- Number of decimal numbers to show after the period/comma
-    Description = "You can slide me with your Mouse to change the value !"
+    Description = "Prediction - "
 })
 
 local Keybind = Section.NewKeybind({
