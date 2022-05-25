@@ -7,11 +7,17 @@ local partmode = true
 local partz = "HumanoidRootPart"
 local Plr;
 
+getgenv().filltrans = 0 --Change fill transparency
+getgenv().outlinetrans = 0 --Change outine transparency
+
 local pred = true
 
 local anchor = 0
 local anchormax = 50
 
+local espfolder = Instance.new("Folder", game.Workspace)
+
+espfolder.Name = "Barshem"
 
 local types = {
     Ball = Enum.PartType.Ball,
@@ -28,15 +34,15 @@ local sets = {
     }
 }
 
-local Tracer = Instance.new("Part", game.Workspace)
+local Tracer = Instance.new("Highlight", game.Workspace.Barshem)
 Tracer.Name = "paigeisbest"
-Tracer.Anchored = true
-Tracer.CanCollide = false
-Tracer.Transparency = 0.65
-Tracer.Parent = game.Workspace
-Tracer.Shape = types.Block
-Tracer.Size = Vector3.new(14, 14, 14)
-Tracer.Color = Color3.fromRGB(222, 222, 222)
+Tracer.Parent = game.Workspace.Barshem
+Tracer.FillColor = Color3.new(87, 15, 83)
+Tracer.OutlineColor = Color3.new(87, 15, 83)
+Tracer.FillTransparency = filltrans
+Tracer.OutlineTransparency = outlinetrans
+Tracer.Adornee = Adornee
+Tracer.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 
 local lp = game.Players.LocalPlayer
 local mouse = lp:GetMouse()
@@ -61,13 +67,13 @@ function getClosestPlayerToCursor()
     local closestPlayer
     local shortestDistance = circle.Radius
 
-    for i, v in pairs(game.Players:GetPlayers()) do
+    for i, v in pairs(game:GetService("Workspace").Players:GetDescendants()) do
         if
-            v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and
-                v.Character.Humanoid.Health ~= 0 and
-                v.Character:FindFirstChild("LowerTorso")
+            v ~= game.Players.LocalPlayer and v and v:FindFirstChild("Humanoid") and
+                v.Humanoid.Health ~= 0 and
+                v:FindFirstChild("LowerTorso")
          then
-            local pos = CC:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+            local pos = CC:WorldToViewportPoint(v.PrimaryPart.Position)
             local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(LocalMouse.X, LocalMouse.Y)).magnitude
             if magnitude < shortestDistance then
                 closestPlayer = v
@@ -90,7 +96,7 @@ UserInputService.InputBegan:Connect(
                     if locked then
                         Plr = getClosestPlayerToCursor()
                         if chat then
-                            local A_1 = "Target: " .. tostring(Plr.Character.Humanoid.DisplayName)
+                            local A_1 = "Target: " .. tostring(Plr.Humanoid.DisplayName)
                             local A_2 = "All"
                             local Event =
                                 game:GetService("ReplicatedStorage").DefaultChatSystemChatEvents.SayMessageRequest
@@ -101,7 +107,7 @@ UserInputService.InputBegan:Connect(
                                 "SendNotification",
                                 {
                                     Title = "Itchy-ware",
-                                    Text = "Target: " .. tostring(Plr.Character.Humanoid.DisplayName),
+                                    Text = "Target: " .. tostring(Plr.Humanoid.Parent),
                                     Icon = "http://www.roblox.com/asset/?id=9111814881"
                                 }
                             )
@@ -170,19 +176,18 @@ game.Players.LocalPlayer.Chatted:Connect(
 )
 --
 local function rainbowa()
-    local Brick = workspace.paigeisbest
-            Brick.Color = Color3.fromHSV(tick()%5/5,0.5,1)
+            Tracer.FillColor = Color3.fromHSV(tick()%5/5,0.5,1)
+            Tracer.OutlineColor = Color3.fromHSV(tick()%5/5,0.5,1)
         end
 --
 if partmode then
     game:GetService "RunService".Stepped:connect(
         function()
-            if locked and Plr.Character and Plr.Character:FindFirstChild("LowerTorso") then
-                Tracer.CFrame =
-                    CFrame.new(Plr.Character.LowerTorso.Position + (Plr.Character.LowerTorso.Velocity*normpred))
-                    rainbowa()
+            if locked and Plr and Plr:FindFirstChild("LowerTorso") then
+                Tracer.Parent = Plr
+                rainbowa()
             else
-                Tracer.CFrame = CFrame.new(0, 9999, 0)
+                Tracer.Parent = game.Workspace.Barshem
             end
         end
     )
@@ -193,15 +198,15 @@ end
     setreadonly(mt, false)
     mt.__namecall = newcclosure(function(...)
         local args = {...}
-        if locked and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and sets.itchysets.Enabled and Plr.Character ~= nil then
+        if locked and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and sets.itchysets.Enabled and Plr ~= nil then
 
             if pred == true then
                 
-            args[3] = Plr.Character[partz].Position+(Plr.Character[partz].Velocity*normpred)
+            args[3] = Plr[partz].Position+(Plr[partz].Velocity*normpred)
 
             else
 
-            args[3] = Plr.Character[partz].Position
+            args[3] = Plr[partz].Position
 
             end
 
@@ -211,16 +216,16 @@ end
     end)
 
     game:GetService("RunService").RenderStepped:Connect(function()
-        if sets.itchysets.RESOVLER == true and Plr.Character ~= nil and locked and sets.itchysets.Enabled then
-        if sets.itchysets.AIRSHOT == true and locked and Plr.Character ~= nil then
+        if sets.itchysets.RESOVLER == true and Plr ~= nil and locked and sets.itchysets.Enabled then
+        if sets.itchysets.AIRSHOT == true and locked and Plr ~= nil then
             
-            if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+            if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
                 
                 --// Airshot
 
                 --// Anchor Check
 
-                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                if Plr ~= nil and Plr.HumanoidRootPart.Anchored == true then
                     anchor = anchor + 1
                     if anchor >= anchormax then
                         pred = false
@@ -237,7 +242,7 @@ end
             else
                 --// Anchor Check
 
-                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                if Plr ~= nil and Plr.HumanoidRootPart.Anchored == true then
                     anchor = anchor + 1
                     if anchor >= anchormax then
                         pred = false
@@ -256,7 +261,7 @@ end
 
                 --// Anchor Check
 
-                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                if Plr ~= nil and Plr.HumanoidRootPart.Anchored == true then
                     anchor = anchor + 1
                     if anchor >= anchormax then
                         pred = false
