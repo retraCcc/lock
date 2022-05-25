@@ -37,7 +37,6 @@ local Page = Window.NewPage({Text = "Rage"})
 local Section = Page.NewSection({Text = "Rage"})
 
 local target = true
-local key = Enum.KeyCode.Q
 local chat = false
 local notifications = true
 local partmode = true
@@ -45,6 +44,7 @@ local partz = "HumanoidRootPart"
 local Plr;
 
 getgenv().normpred = 0
+getgenv().key = nil
 
 getgenv().filltrans = 0.7 --Change fill transparency
 getgenv().outlinetrans = 0.1 --Change outine transparency
@@ -320,14 +320,11 @@ local Slider = Section.NewSlider({
 })
 
 local Keybind = Section.NewKeybind({
-    Text = "Press Me", 
-    Callback = function()
-        print("You pressed the right key !")
-    end, 
+    Text = "Silent-Aim Keybind", 
     KeyCallback = function(new)
-        print("You changed the key to: " .. string.sub(tostring(new), 14, #tostring(new)))
+        key = new
     end, 
-    Default = Enum.KeyCode.X,
+    Default = Enum.KeyCode.Q,
     Description = "Press the key to activate this !",
 })
 
