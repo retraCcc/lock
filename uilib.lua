@@ -264,8 +264,8 @@ Library.NewWindow = function(window_info)
         
             Section_Background = RGB(25, 25, 25),
         
-            Accent = RGB(0, 255, 0),
-            Dark_Accent = RGB(0, 100, 0)
+            Accent = RGB(255, 0, 207),
+            Dark_Accent = RGB(169, 21, 141)
         }
     }
     local DESTROY_UI = false;
