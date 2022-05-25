@@ -1,4 +1,8 @@
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Blissful4992/Kinetic/main/src.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/retraCcc/lock/main/logo.lua"))()
+
+wait(0.05)
+
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/retraCcc/lock/main/uilib.lua"))()
 
 local Overrides = {
     Background = Color3.fromRGB(30, 30, 30),
@@ -9,8 +13,8 @@ local Overrides = {
 
     Text_Color = Color3.fromRGB(255, 255, 255),
 
-    Accent = Color3.fromRGB(0, 255, 0),
-    Dark_Accent = Color3.fromRGB(0, 100, 0),
+    Accent = Color3.fromRGB(255, 0, 207),
+    Dark_Accent = Color3.fromRGB(169, 21, 141),
 }
 
 local Window = Library.NewWindow({
@@ -42,8 +46,8 @@ local Plr;
 
 getgenv().normpred = 0
 
-getgenv().filltrans = 0 --Change fill transparency
-getgenv().outlinetrans = 0 --Change outine transparency
+getgenv().filltrans = 0.7 --Change fill transparency
+getgenv().outlinetrans = 0.1 --Change outine transparency
 
 local pred = true
 
@@ -63,9 +67,9 @@ local types = {
 local sets = {
     itchysets = {
         Enabled = true,
-        AIRSHOT = false,
+        AIRSHOT = true,
         AUTOPRED = false,
-        RESOVLER = false
+        RESOVLER = true
     }
 }
 
@@ -79,9 +83,13 @@ Tracer.OutlineTransparency = outlinetrans
 Tracer.Adornee = Adornee
 Tracer.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 
+local Inset = game:GetService("GuiService"):GetGuiInset().Y
+
 local lp = game.Players.LocalPlayer
-local mouse = lp:GetMouse()
+local Mouse = lp:GetMouse()
 local Runserv = game:GetService("RunService")
+
+local Line = Drawing.new("Line")
 
 local circle = Drawing.new("Circle")
 circle.Color = Color3.fromRGB(255, 255, 255)
@@ -91,10 +99,10 @@ circle.Radius = 120
 circle.Transparency = 0
 circle.Visible = true
 circle.Filled = false
-circle.Position = Vector2.new(mouse.X, mouse.Y + 35)
+circle.Position = Vector2.new(Mouse.X, Mouse.Y + 35)
 
 local guimain = Instance.new("Folder", game.CoreGui)
-local CC = game:GetService "Workspace".CurrentCamera
+local CC = game:GetService("Workspace").CurrentCamera
 local LocalMouse = game.Players.LocalPlayer:GetMouse()
 local locked = false
 
@@ -132,7 +140,7 @@ UserInputService.InputBegan:Connect(
                         Plr = getClosestPlayerToCursor()
                         for i = 1, 1 do
                         Window.NewNotification({
-                        Title = "Locked",
+                        Title = "Fairy-Ware",
                         Body = "Locked",
                         Time = math.random(1, 3)
                         })
@@ -141,7 +149,7 @@ UserInputService.InputBegan:Connect(
                     elseif not locked then
                     for i = 1, 1 do
                     Window.NewNotification({
-                    Title = "Unlocked",
+                    Title = "Fairy-Ware",
                     Body = "Unlocked",
                     Time = math.random(1, 3)
                     })
@@ -157,16 +165,28 @@ UserInputService.InputBegan:Connect(
 local function rainbowa()
             Tracer.FillColor = Color3.fromHSV(tick()%5/5,0.5,1)
             Tracer.OutlineColor = Color3.fromHSV(tick()%5/5,0.5,1)
-        end
+end
+local function rainbowb()
+            Line.Color = Color3.fromHSV(tick()%5/5,0.5,1)
+end
 --
 if partmode then
     game:GetService "RunService".Stepped:connect(
         function()
             if locked and Plr and Plr:FindFirstChild("LowerTorso") then
+                local Vector = CC:WorldToViewportPoint(Plr[partz].Position + (Plr[partz].Velocity*normpred))
+                Line.Color = Color3.fromRGB(153, 50, 204)
+                Line.Transparency = 1
+                Line.Thickness = 2
+                Line.From = Vector2.new(Mouse.X, Mouse.Y + Inset)
+                Line.To = Vector2.new(Vector.X, Vector.Y)
+                Line.Visible = true
+                rainbowb()
                 Tracer.Parent = Plr
                 rainbowa()
             else
-                Tracer.Parent = game.Workspace.Barshem
+            Line.Visible = false
+            Tracer.Parent = game.Workspace.Barshem
             end
         end
     )
@@ -296,7 +316,7 @@ local Slider = Section.NewSlider({
     Default = 0,
     Min = 0, Max = 1,
     Decimals = 2, -- Number of decimal numbers to show after the period/comma
-    Description = "You can slide me with your mouse to change the value !"
+    Description = "You can slide me with your Mouse to change the value !"
 })
 
 local Keybind = Section.NewKeybind({
@@ -310,16 +330,6 @@ local Keybind = Section.NewKeybind({
     Default = Enum.KeyCode.X,
     Description = "Press the key to activate this !",
 })
-
-for i = 1, 1 do
-Window.NewNotification({
-Title = "! Welcome !",
-Body = "Welcome to Fairy-Ware",
-Time = math.random(2, 10)
-   
-})
-task.wait(0.2)
-end
 
 local Page2 = Window.NewPage({Text = "Settings"})
 
