@@ -67,9 +67,9 @@ local types = {
 local sets = {
     itchysets = {
         Enabled = true,
-        AIRSHOT = true,
+        AIRSHOT = false,
         AUTOPRED = false,
-        RESOVLER = true
+        RESOVLER = false
     }
 }
 
