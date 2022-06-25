@@ -35,7 +35,7 @@ local tableinsert = table.insert
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
-    Enabled = true,
+    Enabled5 = false,
 
     VisibleCheck = true,
     
@@ -137,7 +137,7 @@ end
 
 -- // Check if silent aim can used
 function Aiming.Check()
-    return (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
+    return (Aiming.Enabled5 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
 end
 Aiming.checkSilentAim = Aiming.Check
 
@@ -268,13 +268,12 @@ local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera
 
 local DaHoodSettings = {
-    SilentAim = true,
-    Prediction = 0.14
+    SilentAim = true
 }
 getgenv().DaHoodSettings = DaHoodSettings
 
 function Aiming.Check()
-    if not (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
+    if not (Aiming.Enabled5 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
         return false
     end
 
@@ -295,7 +294,7 @@ __index = hookmetamethod(game, "__index", function(t, k)
         local SelectedPart = Aiming.SelectedPart
 
         if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
-            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * DaHoodSettings.Prediction)
+            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * normpred)
 
             return (k == "Hit" and Hit or SelectedPart)
         end
@@ -304,6 +303,5 @@ __index = hookmetamethod(game, "__index", function(t, k)
     return __index(t, k)
 end)
 
-DaHoodSettings.Prediction = 0.1437
 Aiming.TargetPart = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart", "RightFoot", "LeftFoot"}
 Aiming.HitChance = 110
