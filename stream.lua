@@ -267,6 +267,8 @@ local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera
 
+local predd = true
+
 local DaHoodSettings = {
     SilentAim = true
 }
@@ -288,20 +290,29 @@ function Aiming.Check()
     return true
 end
 
-local __index
-__index = hookmetamethod(game, "__index", function(t, k)
-    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+setreadonly(mt, false)
+mt.__namecall =
+    newcclosure(
+    function(...)
+        local args = {...}
         local SelectedPart = Aiming.SelectedPart
+        if
+            Aiming.Check() and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and Enabled5 and
+                Plr ~= nil
+         then
+            if predd == true then
+                args[3] = SelectedPart.Position + (SelectedPart.Velocity * normpred)
+            else
+                args[3] = SelectedPart.Position
+            end
 
-        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
-            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * normpred)
-
-            return (k == "Hit" and Hit or SelectedPart)
+            return old(unpack(args))
         end
+        return old(...)
     end
-
-    return __index(t, k)
-end)
+)
 
 Aiming.TargetPart = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart", "RightFoot", "LeftFoot"}
 Aiming.HitChance = 110
