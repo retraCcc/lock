@@ -267,8 +267,6 @@ local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local CurrentCamera = Workspace.CurrentCamera
 
-local predd = true
-
 local DaHoodSettings = {
     SilentAim = true
 }
