@@ -35,7 +35,7 @@ local tableinsert = table.insert
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
-    Enabled5 = false,
+    Enabled5 = true,
 
     VisibleCheck = true,
     
@@ -45,9 +45,8 @@ getgenv().Aiming = {
     SelectedPart = nil,
 
     TargetPart = {"Head", "UpperTorso", "HumanoidRootPart", "LowerTorso"},
-
 }
-
+    
 local Aiming = getgenv().Aiming
 
 -- // Custom Functions
@@ -233,7 +232,7 @@ function Aiming.GetClosestPlayerToCursor()
         local Character = Aiming.Character(Player)
 
         -- // Make sure isn't ignored and Character exists
-        if (Character) then
+        if (Aiming.IsIgnored(Player) == false and Character) then
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
@@ -252,12 +251,12 @@ function Aiming.GetClosestPlayerToCursor()
             end
         end
     end
-
+        
     -- // End
     Aiming.Selected = ClosestPlayer
     Aiming.SelectedPart = TargetPart
 end
-
+    
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -288,8 +287,8 @@ function Aiming.Check()
     return true
 end
 
-local index
-index = hookmetamethod(game, "index", function(t, k)
+local __index
+__index = hookmetamethod(game, "__index", function(t, k)
     if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
         local SelectedPart = Aiming.SelectedPart
 
@@ -300,8 +299,8 @@ index = hookmetamethod(game, "index", function(t, k)
         end
     end
 
-    return index(t, k)
+    return __index(t, k)
 end)
 
-Aiming.TargetPart = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart"}
-Aiming.HitChance = 110
+-- //
+return Aiming
