@@ -296,7 +296,7 @@ index = hookmetamethod(game, "index", function(t, k)
         local SelectedPart = Aiming.SelectedPart
 
         if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
-            local Hit = SelectedPart.Position + (SelectedPart.Velocity * normpred)
+            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * normpred)
 
             return (k == "Hit" and Hit or SelectedPart)
         end
