@@ -35,7 +35,7 @@ local tableinsert = table.insert
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
-    Enabled5 = true,
+    Enabled5 = false,
 
     VisibleCheck = true,
     
@@ -232,7 +232,7 @@ function Aiming.GetClosestPlayerToCursor()
         local Character = Aiming.Character(Player)
 
         -- // Make sure isn't ignored and Character exists
-        if (Aiming.IsIgnored(Player) == false and Character) then
+        if (Character) then
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
