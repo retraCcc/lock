@@ -305,5 +305,5 @@ index = hookmetamethod(game, "index", function(t, k)
     return index(t, k)
 end)
 
-Aiming.TargetPart = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart", "RightFoot", "LeftFoot"}
+Aiming.TargetPart = {"Head", "UpperTorso", "LowerTorso", "HumanoidRootPart"}
 Aiming.HitChance = 110
