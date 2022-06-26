@@ -299,13 +299,10 @@ mt.__namecall =
         local args = {...}
         local SelectedPart = Aiming.SelectedPart
         if
-            Aiming.Check() and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and Enabled5 and
-                Plr ~= nil
+            Aiming.Check() and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and Enabled5
          then
             if predd == true then
                 args[3] = SelectedPart.Position + (SelectedPart.Velocity * normpred)
-            else
-                args[3] = SelectedPart.Position
             end
 
             return old(unpack(args))
