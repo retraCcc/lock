@@ -35,7 +35,12 @@ local tableinsert = table.insert
 
 -- // Silent Aim Vars
 getgenv().Aiming = {
-    Enabled5 = false,
+    Enabled = true,
+
+    ShowFOV = false,
+    FOV = 119,
+    FOVSides = 300,
+    FOVColour = Color3fromRGB(0, 147, 255),
 
     VisibleCheck = true,
     
@@ -44,10 +49,35 @@ getgenv().Aiming = {
     Selected = nil,
     SelectedPart = nil,
 
-    TargetPart = {"Head", "UpperTorso", "HumanoidRootPart", "LowerTorso"},
+    TargetPart = {"Head", "UpperTorso", "HumanoidRootPart", "LowerTorso"}
 }
-    
 local Aiming = getgenv().Aiming
+
+-- // Create circle
+local circle = Drawingnew("Circle")
+circle.Transparency = 1
+circle.Thickness = 2
+circle.Color = Aiming.FOVColour
+circle.Filled = false
+Aiming.FOVCircle = circle
+
+-- // Update
+function Aiming.UpdateFOV()
+    -- // Make sure the circle exists
+    if not (circle) then
+        return
+    end
+
+    -- // Set Circle Properties
+    circle.Visible = Aiming.ShowFOV
+    circle.Radius = (Aiming.FOV * 3)
+    circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
+    circle.NumSides = Aiming.FOVSides
+    circle.Color = Aiming.FOVColour
+
+    -- // Return circle
+    return circle
+end
 
 -- // Custom Functions
 local CalcChance = function(percentage)
@@ -136,7 +166,7 @@ end
 
 -- // Check if silent aim can used
 function Aiming.Check()
-    return (Aiming.Enabled5 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
+    return (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
 end
 Aiming.checkSilentAim = Aiming.Check
 
@@ -231,7 +261,7 @@ function Aiming.GetClosestPlayerToCursor()
         -- // Get Character
         local Character = Aiming.Character(Player)
 
-        -- // Make sure isn't ignored and Character exists
+        -- // Make sure Character exists
         if (Character) then
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
@@ -239,7 +269,7 @@ function Aiming.GetClosestPlayerToCursor()
             -- // Check if part exists and health
             if (TargetPartTemp and Aiming.CheckHealth(Player)) then
                 -- // Check if is in FOV
-                if (_G.radius > Magnitude and Magnitude < ShortestDistance) then
+                if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
                     -- // Check if Visible
                     if (Aiming.VisibleCheck and not Aiming.IsPartVisible(TargetPartTemp, Character)) then continue end
 
@@ -251,55 +281,16 @@ function Aiming.GetClosestPlayerToCursor()
             end
         end
     end
-        
+
     -- // End
     Aiming.Selected = ClosestPlayer
     Aiming.SelectedPart = TargetPart
 end
-    
-local Workspace = game:GetService("Workspace")
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
-local UserInputService = game:GetService("UserInputService")
 
-local LocalPlayer = Players.LocalPlayer
-local Mouse = LocalPlayer:GetMouse()
-local CurrentCamera = Workspace.CurrentCamera
-
-local DaHoodSettings = {
-    SilentAim = true
-}
-getgenv().DaHoodSettings = DaHoodSettings
-
-function Aiming.Check()
-    if not (Aiming.Enabled5 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
-        return false
-    end
-
-    local Character = Aiming.Character(Aiming.Selected)
-    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
-    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
-
-    if (KOd or Grabbed) then
-        return false
-    end
-
-    return true
-end
-
-local __index
-__index = hookmetamethod(game, "__index", function(t, k)
-    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
-        local SelectedPart = Aiming.SelectedPart
-
-        if (DaHoodSettings.SilentAim and (k == "Hit" or k == "Target")) then
-            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * normpred)
-
-            return (k == "Hit" and Hit or SelectedPart)
-        end
-    end
-
-    return __index(t, k)
+-- // Heartbeat Function
+Heartbeat:Connect(function()
+    Aiming.UpdateFOV()
+    Aiming.GetClosestPlayerToCursor()
 end)
 
 -- //
