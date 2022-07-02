@@ -207,17 +207,13 @@ end
 
 local function Protect_GUI(UI)
     if syn then
-        print("Synapse X")
         syn.protect_gui(UI)
         UI.Parent=game:GetService("CoreGui")
     elseif getexecutorname and getexecutorname() == "ScriptWare" then
-        print("Script-Ware")
         UI.Parent=gethui()
     elseif KRNL_LOADED then
-        print("KRNL")
         UI.Parent=gethui()
     else
-        print("Other Exec")
         UI.Parent=game:GetService("CoreGui")
     end
 end
