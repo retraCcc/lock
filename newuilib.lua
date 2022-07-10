@@ -504,7 +504,7 @@ function library:Load(opts)
                     FontSize = Enum.FontSize.Size12,
                     TextSize = 12,
                     Text = text,
-                    TextColor3 = theme.TextColor,
+                    TextColor3 = Color3.fromRGB(40, 40, 40),
                     Font = Enum.Font.Gotham,
                     TextXAlignment = Enum.TextXAlignment.Left,
                     Parent = sectionContent
