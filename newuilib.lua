@@ -3,9 +3,7 @@ local tweenService = game:GetService("TweenService")
 local runService = game:GetService("RunService")
 local coreGui = game:GetService("CoreGui")
 
-getgenv().menukey = nil
-
-local library = {flags = {}, toggled = true, keybind = getgenv().menukey, dragSpeed = 0.1}
+local library = {flags = {}, toggled = true, keybind = menukey, dragSpeed = 0.1}
 
 local themes = {
     Dark = {
