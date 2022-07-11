@@ -5,7 +5,7 @@ local coreGui = game:GetService("CoreGui")
 
 local library = {flags = {}, toggled = true, keybind = Enum.KeyCode.BackSlash, dragSpeed = 0.1}
 
-local themes = {
+getgenv().themes = {
     Dark = {
         TextColor = Color3.fromRGB(255, 255, 255),
         MainFrame = Color3.fromRGB(30, 30, 30),
