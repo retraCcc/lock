@@ -2528,7 +2528,7 @@ function library:init()
                             mode = 'toggle';
                             order = #self.options+1;
                             callback = function() end;
-                            keycallback = function() end;
+                            keycallback = function(key) end;
                             indicatorValue = library.keyIndicator:AddValue({value = 'value', key = 'key', enabled = false});
                             noindicator = false;
                             invertindicator = false;
@@ -4086,7 +4086,7 @@ function library:init()
                         mode = 'toggle';
                         order = #self.options+1;
                         callback = function() end;
-                        keycallback = function() end;
+                        keycallback = function(key) end;
                         indicatorValue = library.keyIndicator:AddValue({value = 'value', key = 'key', enabled = false});
                         noindicator = false;
                         state = false;
