@@ -1,28 +1,78 @@
--- // Create circle
-local circle = Drawingnew("Circle")
-circle.Transparency = 1
-circle.Thickness = 2
-circle.Color = Aiming.FOVColour
-circle.Filled = false
-Aiming.FOVCircle = circle
+if getgenv().Aiming then return getgenv().Aiming end
 
--- // Update
-function Aiming.UpdateFOV()
-    -- // Make sure the circle exists
-    if not (circle) then
-        return
-    end
+-- // Services
+local Players = game:GetService("Players")
 
-    -- // Set Circle Properties
-    circle.Visible = Aiming.ShowFOV
-    circle.Radius = (Aiming.FOV * 3)
-    circle.Position = Vector2new(Mouse.X, Mouse.Y + GetGuiInset(GuiService).Y)
-    circle.NumSides = Aiming.FOVSides
-    circle.Color = Aiming.FOVColour
+local Workspace = game:GetService("Workspace")
 
-    -- // Return circle
-    return circle
-end
+local GuiService = game:GetService("GuiService")
+
+local RunService = game:GetService("RunService")
+
+-- // Vars
+local Heartbeat = RunService.Heartbeat
+
+local LocalPlayer = Players.LocalPlayer
+
+local CurrentCamera = Workspace.CurrentCamera
+
+local Mouse = LocalPlayer:GetMouse()
+
+-- // Optimisation Vars (ugly)
+local Drawingnew = Drawing.new
+
+local Color3fromRGB = Color3.fromRGB
+
+local Vector2new = Vector2.new
+
+local GetGuiInset = GuiService.GetGuiInset
+
+local Randomnew = Random.new
+
+local mathfloor = math.floor
+
+local CharacterAdded = LocalPlayer.CharacterAdded
+
+local CharacterAddedWait = CharacterAdded.Wait
+
+local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
+
+local RaycastParamsnew = RaycastParams.new
+
+local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
+
+local Raycast = Workspace.Raycast
+
+local GetPlayers = Players.GetPlayers
+
+local Instancenew = Instance.new
+
+local IsDescendantOf = Instancenew("Part").IsDescendantOf
+
+local FindFirstChildWhichIsA = Instancenew("Part").FindFirstChildWhichIsA
+
+local FindFirstChild = Instancenew("Part").FindFirstChild
+
+local tableremove = table.remove
+
+local tableinsert = table.insert
+
+-- // Silent Aim Vars
+local Aiming = {
+    
+    Enabled10 = false,
+
+    VisibleCheck = true,
+    
+    HitChance = 0,
+
+    Selected = nil,
+    
+    SelectedPart = nil,
+
+    TargetPart = {"Head", "UpperTorso", "HumanoidRootPart", "LowerTorso", "RightUpperLeg", "LeftUpperLeg"},
+    
+}
 
 -- // Custom Functions
 local CalcChance = function(percentage)
@@ -111,7 +161,7 @@ end
 
 -- // Check if silent aim can used
 function Aiming.Check()
-    return (Aiming.Enabled == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
+    return (Aiming.Enabled10 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil)
 end
 Aiming.checkSilentAim = Aiming.Check
 
@@ -121,9 +171,13 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
     -- // Vars
     local ClosestPart = nil
+    
     local ClosestPartPosition = nil
+    
     local ClosestPartOnScreen = false
+    
     local ClosestPartMagnitudeFromMouse = nil
+    
     local ShortestDistance = 1/0
 
     -- //
@@ -189,8 +243,11 @@ end
 function Aiming.GetClosestPlayerToCursor()
     -- // Vars
     local TargetPart = nil
+    
     local ClosestPlayer = nil
+    
     local Chance = CalcChance(Aiming.HitChance)
+    
     local ShortestDistance = 1/0
 
     -- // Chance
@@ -206,7 +263,7 @@ function Aiming.GetClosestPlayerToCursor()
         -- // Get Character
         local Character = Aiming.Character(Player)
 
-        -- // Make sure Character exists
+        -- // Make sure isn't ignored and Character exists
         if (Character) then
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
@@ -214,7 +271,7 @@ function Aiming.GetClosestPlayerToCursor()
             -- // Check if part exists and health
             if (TargetPartTemp and Aiming.CheckHealth(Player)) then
                 -- // Check if is in FOV
-                if (circle.Radius > Magnitude and Magnitude < ShortestDistance) then
+                if (radius > Magnitude and Magnitude < ShortestDistance) then
                     -- // Check if Visible
                     if (Aiming.VisibleCheck and not Aiming.IsPartVisible(TargetPartTemp, Character)) then continue end
 
@@ -232,11 +289,51 @@ function Aiming.GetClosestPlayerToCursor()
     Aiming.SelectedPart = TargetPart
 end
 
--- // Heartbeat Function
-Heartbeat:Connect(function()
-    Aiming.UpdateFOV()
-    Aiming.GetClosestPlayerToCursor()
-end)
-
 -- //
-return Aiming
+
+local Workspace = game:GetService("Workspace")
+
+local Players = game:GetService("Players")
+
+local RunService = game:GetService("RunService")
+
+local UserInputService = game:GetService("UserInputService")
+
+local LocalPlayer = Players.LocalPlayer
+
+local Mouse = LocalPlayer:GetMouse()
+
+local CurrentCamera = Workspace.CurrentCamera
+
+function Aiming.Check()
+    if not (Aiming.Enabled10 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
+        return false
+    end
+
+    local Character = Aiming.Character(Aiming.Selected)
+    
+    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
+    
+    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
+
+    if (KOd or Grabbed) then
+        return false
+    end
+
+    return true
+end
+
+local __index
+__index = hookmetamethod(game, "__index", function(t, k)
+    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
+        local SelectedPart = Aiming.SelectedPart
+
+        if (k == "Hit" or k == "Target") then
+            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * getgenv().normpred)
+
+            return (k == "Hit" and Hit or SelectedPart)
+        end
+    end
+
+    return __index(t, k)
+end)
