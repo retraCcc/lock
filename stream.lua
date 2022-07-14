@@ -231,8 +231,8 @@ function Aiming.GetClosestPlayerToCursor()
         -- // Get Character
         local Character = Aiming.Character(Player)
 
-        -- // Make sure isn't ignored and Character exists
-        if (Aiming.IsIgnored(Player) == false and Character) then
+        -- // Make sure Character exists
+        if (Character) then
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
