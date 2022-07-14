@@ -2,77 +2,52 @@ if getgenv().Aiming then return getgenv().Aiming end
 
 -- // Services
 local Players = game:GetService("Players")
-
 local Workspace = game:GetService("Workspace")
-
 local GuiService = game:GetService("GuiService")
-
 local RunService = game:GetService("RunService")
 
 -- // Vars
 local Heartbeat = RunService.Heartbeat
-
 local LocalPlayer = Players.LocalPlayer
-
 local CurrentCamera = Workspace.CurrentCamera
-
 local Mouse = LocalPlayer:GetMouse()
 
 -- // Optimisation Vars (ugly)
 local Drawingnew = Drawing.new
-
 local Color3fromRGB = Color3.fromRGB
-
 local Vector2new = Vector2.new
-
 local GetGuiInset = GuiService.GetGuiInset
-
 local Randomnew = Random.new
-
 local mathfloor = math.floor
-
 local CharacterAdded = LocalPlayer.CharacterAdded
-
 local CharacterAddedWait = CharacterAdded.Wait
-
 local WorldToViewportPoint = CurrentCamera.WorldToViewportPoint
-
 local RaycastParamsnew = RaycastParams.new
-
 local EnumRaycastFilterTypeBlacklist = Enum.RaycastFilterType.Blacklist
-
 local Raycast = Workspace.Raycast
-
 local GetPlayers = Players.GetPlayers
-
 local Instancenew = Instance.new
-
 local IsDescendantOf = Instancenew("Part").IsDescendantOf
-
 local FindFirstChildWhichIsA = Instancenew("Part").FindFirstChildWhichIsA
-
 local FindFirstChild = Instancenew("Part").FindFirstChild
-
 local tableremove = table.remove
-
 local tableinsert = table.insert
 
 -- // Silent Aim Vars
-local Aiming = {
-    
+getgenv().Aiming = {
     Enabled10 = false,
-
+    
     VisibleCheck = true,
     
-    HitChance = 0,
+    HitChance = nil,
 
     Selected = nil,
-    
     SelectedPart = nil,
 
-    TargetPart = {"Head", "UpperTorso", "HumanoidRootPart", "LowerTorso", "RightUpperLeg", "LeftUpperLeg"},
-    
+    TargetPart = {"Head", "LeftHand", "RightHand", "LeftLowerArm", "RightLowerArm", "LeftUpperArm", "RightUpperArm", "LeftFoot", "LeftLowerLeg", "UpperTorso", "LeftUpperLeg", "RightLowerLeg", "RightFoot", "LowerTorso", "RightUpperLeg"},
 }
+
+local Aiming = getgenv().Aiming
 
 -- // Custom Functions
 local CalcChance = function(percentage)
@@ -171,13 +146,9 @@ function Aiming.GetClosestTargetPartToCursor(Character)
 
     -- // Vars
     local ClosestPart = nil
-    
     local ClosestPartPosition = nil
-    
     local ClosestPartOnScreen = false
-    
     local ClosestPartMagnitudeFromMouse = nil
-    
     local ShortestDistance = 1/0
 
     -- //
@@ -243,11 +214,8 @@ end
 function Aiming.GetClosestPlayerToCursor()
     -- // Vars
     local TargetPart = nil
-    
     local ClosestPlayer = nil
-    
     local Chance = CalcChance(Aiming.HitChance)
-    
     local ShortestDistance = 1/0
 
     -- // Chance
@@ -264,7 +232,7 @@ function Aiming.GetClosestPlayerToCursor()
         local Character = Aiming.Character(Player)
 
         -- // Make sure isn't ignored and Character exists
-        if (Character) then
+        if (Aiming.IsIgnored(Player) == false and Character) then
             -- // Vars
             local TargetPartTemp, _, _, Magnitude = Aiming.GetClosestTargetPartToCursor(Character)
 
@@ -290,50 +258,6 @@ function Aiming.GetClosestPlayerToCursor()
 end
 
 -- //
+return Aiming
 
-local Workspace = game:GetService("Workspace")
-
-local Players = game:GetService("Players")
-
-local RunService = game:GetService("RunService")
-
-local UserInputService = game:GetService("UserInputService")
-
-local LocalPlayer = Players.LocalPlayer
-
-local Mouse = LocalPlayer:GetMouse()
-
-local CurrentCamera = Workspace.CurrentCamera
-
-function Aiming.Check()
-    if not (Aiming.Enabled10 == true and Aiming.Selected ~= LocalPlayer and Aiming.SelectedPart ~= nil) then
-        return false
-    end
-
-    local Character = Aiming.Character(Aiming.Selected)
-    
-    local KOd = Character:WaitForChild("BodyEffects")["K.O"].Value
-    
-    local Grabbed = Character:FindFirstChild("GRABBING_CONSTRAINT") ~= nil
-
-    if (KOd or Grabbed) then
-        return false
-    end
-
-    return true
-end
-
-local __index
-__index = hookmetamethod(game, "__index", function(t, k)
-    if (t:IsA("Mouse") and (k == "Hit" or k == "Target") and Aiming.Check()) then
-        local SelectedPart = Aiming.SelectedPart
-
-        if (k == "Hit" or k == "Target") then
-            local Hit = SelectedPart.CFrame + (SelectedPart.Velocity * getgenv().normpred)
-
-            return (k == "Hit" and Hit or SelectedPart)
-        end
-    end
-
-    return __index(t, k)
-end)
+-- // If you want the examples, look at the docs.
