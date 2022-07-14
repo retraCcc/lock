@@ -33,6 +33,8 @@ local FindFirstChild = Instancenew("Part").FindFirstChild
 local tableremove = table.remove
 local tableinsert = table.insert
 
+_G.radius = 65
+
 -- // Silent Aim Vars
 getgenv().Aiming = {
     Enabled10 = false,
