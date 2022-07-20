@@ -8,7 +8,7 @@ local library = {flags = {}, toggled = true, keybind = Enum.KeyCode.BackSlash, d
 getgenv().themes = {
     Dark = {
         TextColor = Color3.fromRGB(255, 255, 255),
-        MainFrame = Color3.fromRGB(48, 89, 29),
+        MainFrame = Color3.fromRGB(30, 30, 30),
         TabBackground = Color3.fromRGB(20, 20, 20),
         Tab = Color3.fromRGB(30, 30, 30),
         EnabledText = Color3.fromRGB(255, 255, 255),
@@ -243,7 +243,7 @@ function library:Load(opts)
     utility.drag(holder)
 
     local main = utility.create("Frame", {
-        Size = UDim2.new(1, 0, 0, sizeY),
+        Size = UDim2.new(1, 0, 0, 200),
         BackgroundColor3 = theme.MainFrame,
         Parent = holder
     })
