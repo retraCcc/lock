@@ -243,7 +243,7 @@ function library:Load(opts)
     utility.drag(holder)
 
     local main = utility.create("Frame", {
-        Size = UDim2.new(1, 0, 0, 200),
+        Size = UDim2.new(1, 0, 0, sizeY),
         BackgroundColor3 = theme.MainFrame,
         Parent = holder
     })
