@@ -8,7 +8,7 @@ local library = {flags = {}, toggled = true, keybind = Enum.KeyCode.BackSlash, d
 getgenv().themes = {
     Dark = {
         TextColor = Color3.fromRGB(255, 255, 255),
-        MainFrame = Color3.fromRGB(30, 30, 30),
+        MainFrame = Color3.fromRGB(126, 72, 163),
         TabBackground = Color3.fromRGB(20, 20, 20),
         Tab = Color3.fromRGB(30, 30, 30),
         EnabledText = Color3.fromRGB(255, 255, 255),
