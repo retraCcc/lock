@@ -40,8 +40,6 @@ getgenv().Aiming = {
     Enabled10 = false,
     
     VisibleCheck = true,
-    
-    HitChance = 1,
 
     Selected = nil,
     SelectedPart = nil,
@@ -50,18 +48,6 @@ getgenv().Aiming = {
 }
 
 local Aiming = getgenv().Aiming
-
--- // Custom Functions
-local CalcChance = function(percentage)
-    -- // Floor the percentage
-    percentage = mathfloor(percentage)
-
-    -- // Get the chance
-    local chance = mathfloor(Randomnew().NextNumber(Randomnew(), 0, 1) * 100) / 100
-
-    -- // Return
-    return chance <= percentage / 100
-end
 
 -- // Customisable Checking Functions: Is a part visible
 function Aiming.IsPartVisible(Part, PartDescendant)
@@ -217,16 +203,7 @@ function Aiming.GetClosestPlayerToCursor()
     -- // Vars
     local TargetPart = nil
     local ClosestPlayer = nil
-    local Chance = CalcChance(Aiming.HitChance)
     local ShortestDistance = 1/0
-
-    -- // Chance
-    if (not Chance) then
-        Aiming.Selected = LocalPlayer
-        Aiming.SelectedPart = nil
-
-        return LocalPlayer
-    end
 
     -- // Loop through all players
     for _, Player in ipairs(GetPlayers(Players)) do
